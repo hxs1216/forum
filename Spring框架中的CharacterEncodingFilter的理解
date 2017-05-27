@@ -1,0 +1,54 @@
+Spring中的字符集过滤器可以很方便的为我们解决项目中出现的中文乱码问题，只需要在web.xml中文件中配置一下该过滤器，设置两个重要的参数
+（编码和forceEncoding）即可：
+
+在web.xml文件中添加了如下内容:
+<filter>
+  <filter-name>encodingFilter</filter-name>
+  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  <init-param>
+    <param-name>encoding</param-name>
+    <param-value>utf-8</param-value>
+    <param-name>forceEncoding</param-name>
+    <param-value>true</param-value>
+  </init-param>
+</filter>
+<filter-mapping>
+  <filter-name>encodingFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+
+CharacterEncodingFilter的源码:
+private String encoding;
+private boolean forceEncoding = false;
+public void setEncoding(String encoding) {
+		this.encoding = encoding;
+}
+public void setForceEncoding(boolean forceEncoding) {
+		this.forceEncoding = forceEncoding;
+}
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+throws ServletException, IOException {
+  if (this.encoding != null && (this.forceEncoding || request.getCharacterEncoding() == null)) {
+    request.setCharacterEncoding(this.encoding);
+    if (this.forceEncoding) {
+      response.setCharacterEncoding(this.encoding);
+    }
+  }
+  filterChain.doFilter(request, response);
+}
+
+该CharacterEncodingFilter extends OncePerRequestFilter:一开始会去执行OncePerRequestFilter的doFilter方法，然后执行该CharacterEncodingFilter
+的doFilterInternal的方法。
+
+doFilterInternal方法很简单，就是看看是否设置了编码，如果设置了编码，且请求中没有设置的characterEncoding的话，它会负责设置request的characterEncoding，
+并且如果forceEncoding设置为真实的话，也会设置response的characterEncoding。
+
+该过滤器的配置作用相当于在servlet中：
+public void  XXXXX（HttpServletRequest request，HttpServletResponse response）throws Exception   
+{  
+       request.setCharacterEncoding（“UTF-8” ）;  
+       response.setCharacterEncoding（“UTF-8” ）; 
+} 
+因此，在请求处理的过程中我们可以不用考虑编码方面的问题，上面两句代码可以省略，编码统一交给Spring过滤器去处理，我们可以专心处理我们的业务逻辑代码，
+这就是春天字符集过滤器的方便之处。
