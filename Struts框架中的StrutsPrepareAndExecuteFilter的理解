@@ -1,3 +1,5 @@
 首先声明一下：
-Filter的init方法一定会在容器启动的时候执行，但Servlet的init方法未必，要看load参数是怎么写的，
-默认的话，只有该Servlet的首次被访问（访问路径匹配了urlMapping中）才会触发初始化的调用。但是基本上初始化工作放在ServletContextListener的contextInitialized里
+Filter的init方法一定会在容器启动的时候执行，但Servlet的init方法未必，要看load参数是怎么写的，默认的话，只有该Servlet的首次被访问
+（访问路径匹配了urlMapping中）才会触发初始化的调用。但基本上初始化工作都放在ServletContextListener的contextInitialized里。
+
+
