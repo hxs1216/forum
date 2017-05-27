@@ -2,4 +2,84 @@
 Filter的init方法一定会在容器启动的时候执行，但Servlet的init方法未必，要看load参数是怎么写的，默认的话，只有该Servlet的首次被访问
 （访问路径匹配了urlMapping中）才会触发初始化的调用。但基本上初始化工作都放在ServletContextListener的contextInitialized里。
 
+web.xml配置文件：
+<filter>
+  <filter-name>struts2</filter-name>
+  <filter-class>
+    org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>struts2</filter-name>
+  <url-pattern>*.do</url-pattern>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>struts2</filter-name>
+  <url-pattern>*.action</url-pattern>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>struts2</filter-name>
+  <url-pattern>*.jsp</url-pattern>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>struts2</filter-name>
+  <url-pattern>/struts/*</url-pattern>
+</filter-mapping>
+
+Struts框架的源代码：
+//服务器一开启，就加载该filter的init方法
+public void init(FilterConfig filterConfig) throws ServletException {
+    InitOperations init = new InitOperations();
+    Dispatcher dispatcher = null;
+    try {
+        //对filterConfig方法的一个封装
+        FilterHostConfig config = new FilterHostConfig(filterConfig);
+        // 初始化struts内部日志  
+        init.initLogging(config);
+        //创建Dispatcher的一个实例，且initDispatcher方法中有init()初始化方法(加载struts.xml、default.properties等初始化文件)
+        dispatcher = init.initDispatcher(config);
+        init.initStaticContentLoader(config, dispatcher);
+        //创建PrepareOperations、ExecuteOperations实例
+        prepare = new PrepareOperations(filterConfig.getServletContext(), dispatcher);
+        execute = new ExecuteOperations(filterConfig.getServletContext(), dispatcher);
+        this.excludedPatterns = init.buildExcludedPatternsList(dispatcher);
+
+        postInit(dispatcher, filterConfig);
+    } finally {
+        if (dispatcher != null) {
+            dispatcher.cleanUpAfterInit();
+        }
+        init.cleanup();
+    }
+}
+
+public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+
+    HttpServletRequest request = (HttpServletRequest) req;
+    HttpServletResponse response = (HttpServletResponse) res;
+
+    try {
+        if (excludedPatterns != null && prepare.isUrlExcluded(request, excludedPatterns)) {
+            chain.doFilter(request, response);
+        } else {
+            //设置编码
+            prepare.setEncodingAndLocale(request, response);
+            //创建Action上下文
+            prepare.createActionContext(request, response);
+            prepare.assignDispatcherToThread();
+            request = prepare.wrapRequest(request);
+            ActionMapping mapping = prepare.findActionMapping(request, response, true);
+            if (mapping == null) {
+                boolean handled = execute.executeStaticResourceRequest(request, response);
+                if (!handled) {
+                    chain.doFilter(request, response);
+                }
+            } else {
+                execute.executeAction(request, response, mapping);
+            }
+        }
+    } finally {
+        prepare.cleanupRequest(request);
+    }
+}
+
 
