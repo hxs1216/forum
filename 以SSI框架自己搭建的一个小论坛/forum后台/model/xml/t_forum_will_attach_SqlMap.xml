@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_forum_will_attach" >
+  <resultMap id="BaseResultMap" class="com.nuchina.forum.model.ForumWillAttach" >
+    <result column="ATTACHID" property="attachid" jdbcType="INTEGER" />
+    <result column="APPLYID" property="applyid" jdbcType="DECIMAL" />
+    <result column="ATTACHPATH" property="attachpath" jdbcType="VARCHAR" />
+    <result column="UPTIME" property="uptime" jdbcType="TIMESTAMP" />
+    <result column="UPUSERNAME" property="upusername" jdbcType="VARCHAR" />
+    <result column="UPUSERID" property="upuserid" jdbcType="VARCHAR" />
+    <result column="ATTACHNAME" property="attachname" jdbcType="VARCHAR" />
+    <result column="ATTSIZE" property="attsize" jdbcType="VARCHAR" />
+    <result column="ATTSTATE" property="attstate" jdbcType="VARCHAR" />
+    <result column="SEEIDS" property="seeids" jdbcType="VARCHAR" />
+    <result column="SEENAMES" property="seenames" jdbcType="VARCHAR" />
+    <result column="ATTACHTYPE" property="attachtype" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="t_forum_will_attach.Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="t_forum_will_attach.mysql_Pagination_Limit" >
+    <dynamic >
+      <isNotEmpty property="mysqlOffset" >
+        <isNotEmpty property="mysqlLength" >
+          <![CDATA[ limit #mysqlOffset# , #mysqlLength# ]]>
+        </isNotEmpty>
+      </isNotEmpty>
+    </dynamic>
+  </sql>
+  <sql id="t_forum_will_attach.Base_Column_List" >
+    ATTACHID, APPLYID, ATTACHPATH, UPTIME, UPUSERNAME, UPUSERID, ATTACHNAME, ATTSIZE, 
+    ATTSTATE, SEEIDS, SEENAMES, ATTACHTYPE
+  </sql>
+  <select id="t_forum_will_attach.selectByExample" resultMap="BaseResultMap" parameterClass="com.nuchina.forum.model.ForumWillAttachExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="t_forum_will_attach.Base_Column_List" />
+    from t_forum_will_attach
+    <isParameterPresent >
+      <include refid="t_forum_will_attach.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+    <include refid="t_forum_will_attach.mysql_Pagination_Limit" />
+  </select>
+  <select id="t_forum_will_attach.selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    select 
+    <include refid="t_forum_will_attach.Base_Column_List" />
+    from t_forum_will_attach
+    where ATTACHID = #attachid:INTEGER#
+  </select>
+  <delete id="t_forum_will_attach.deleteByPrimaryKey" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    delete from t_forum_will_attach
+    where ATTACHID = #attachid:INTEGER#
+  </delete>
+  <delete id="t_forum_will_attach.deleteByExample" parameterClass="com.nuchina.forum.model.ForumWillAttachExample" >
+    delete from t_forum_will_attach
+    <include refid="t_forum_will_attach.Example_Where_Clause" />
+  </delete>
+  <insert id="t_forum_will_attach.insert" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    insert into t_forum_will_attach (ATTACHID, APPLYID, ATTACHPATH, UPTIME, 
+      UPUSERNAME, UPUSERID, ATTACHNAME, ATTSIZE, 
+      ATTSTATE, SEEIDS, SEENAMES, ATTACHTYPE)
+    values (#attachid:INTEGER#, #applyid:DECIMAL#, #attachpath:VARCHAR#, #uptime:TIMESTAMP#, 
+      #upusername:VARCHAR#, #upuserid:VARCHAR#, #attachname:VARCHAR#, #attsize:VARCHAR#, 
+      #attstate:VARCHAR#, #seeids:VARCHAR#, #seenames:VARCHAR#, #attachtype:VARCHAR#)
+  </insert>
+  <insert id="t_forum_will_attach.insertSelective" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    insert into t_forum_will_attach
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="attachid" >
+        ATTACHID
+      </isNotNull>
+      <isNotNull prepend="," property="applyid" >
+        APPLYID
+      </isNotNull>
+      <isNotNull prepend="," property="attachpath" >
+        ATTACHPATH
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        UPTIME
+      </isNotNull>
+      <isNotNull prepend="," property="upusername" >
+        UPUSERNAME
+      </isNotNull>
+      <isNotNull prepend="," property="upuserid" >
+        UPUSERID
+      </isNotNull>
+      <isNotNull prepend="," property="attachname" >
+        ATTACHNAME
+      </isNotNull>
+      <isNotNull prepend="," property="attsize" >
+        ATTSIZE
+      </isNotNull>
+      <isNotNull prepend="," property="attstate" >
+        ATTSTATE
+      </isNotNull>
+      <isNotNull prepend="," property="seeids" >
+        SEEIDS
+      </isNotNull>
+      <isNotNull prepend="," property="seenames" >
+        SEENAMES
+      </isNotNull>
+      <isNotNull prepend="," property="attachtype" >
+        ATTACHTYPE
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="attachid" >
+        #attachid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="applyid" >
+        #applyid:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="attachpath" >
+        #attachpath:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        #uptime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="upusername" >
+        #upusername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="upuserid" >
+        #upuserid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attachname" >
+        #attachname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attsize" >
+        #attsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attstate" >
+        #attstate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="seeids" >
+        #seeids:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="seenames" >
+        #seenames:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attachtype" >
+        #attachtype:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="t_forum_will_attach.countByExample" parameterClass="com.nuchina.forum.model.ForumWillAttachExample" resultClass="java.lang.Integer" >
+    select count(*) from t_forum_will_attach
+    <include refid="t_forum_will_attach.Example_Where_Clause" />
+  </select>
+  <update id="t_forum_will_attach.updateByExampleSelective" >
+    update t_forum_will_attach
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.attachid" >
+        ATTACHID = #record.attachid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyid" >
+        APPLYID = #record.applyid:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.attachpath" >
+        ATTACHPATH = #record.attachpath:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.uptime" >
+        UPTIME = #record.uptime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="record.upusername" >
+        UPUSERNAME = #record.upusername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.upuserid" >
+        UPUSERID = #record.upuserid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.attachname" >
+        ATTACHNAME = #record.attachname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.attsize" >
+        ATTSIZE = #record.attsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.attstate" >
+        ATTSTATE = #record.attstate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.seeids" >
+        SEEIDS = #record.seeids:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.seenames" >
+        SEENAMES = #record.seenames:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.attachtype" >
+        ATTACHTYPE = #record.attachtype:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="t_forum_will_attach.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="t_forum_will_attach.updateByExample" >
+    update t_forum_will_attach
+    set ATTACHID = #record.attachid:INTEGER#,
+      APPLYID = #record.applyid:DECIMAL#,
+      ATTACHPATH = #record.attachpath:VARCHAR#,
+      UPTIME = #record.uptime:TIMESTAMP#,
+      UPUSERNAME = #record.upusername:VARCHAR#,
+      UPUSERID = #record.upuserid:VARCHAR#,
+      ATTACHNAME = #record.attachname:VARCHAR#,
+      ATTSIZE = #record.attsize:VARCHAR#,
+      ATTSTATE = #record.attstate:VARCHAR#,
+      SEEIDS = #record.seeids:VARCHAR#,
+      SEENAMES = #record.seenames:VARCHAR#,
+      ATTACHTYPE = #record.attachtype:VARCHAR#
+    <isParameterPresent >
+      <include refid="t_forum_will_attach.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="t_forum_will_attach.updateByPrimaryKeySelective" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    update t_forum_will_attach
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="applyid" >
+        APPLYID = #applyid:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="attachpath" >
+        ATTACHPATH = #attachpath:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        UPTIME = #uptime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="upusername" >
+        UPUSERNAME = #upusername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="upuserid" >
+        UPUSERID = #upuserid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attachname" >
+        ATTACHNAME = #attachname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attsize" >
+        ATTSIZE = #attsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attstate" >
+        ATTSTATE = #attstate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="seeids" >
+        SEEIDS = #seeids:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="seenames" >
+        SEENAMES = #seenames:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="attachtype" >
+        ATTACHTYPE = #attachtype:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ATTACHID = #attachid:INTEGER#
+  </update>
+  <update id="t_forum_will_attach.updateByPrimaryKey" parameterClass="com.nuchina.forum.model.ForumWillAttach" >
+    update t_forum_will_attach
+    set APPLYID = #applyid:DECIMAL#,
+      ATTACHPATH = #attachpath:VARCHAR#,
+      UPTIME = #uptime:TIMESTAMP#,
+      UPUSERNAME = #upusername:VARCHAR#,
+      UPUSERID = #upuserid:VARCHAR#,
+      ATTACHNAME = #attachname:VARCHAR#,
+      ATTSIZE = #attsize:VARCHAR#,
+      ATTSTATE = #attstate:VARCHAR#,
+      SEEIDS = #seeids:VARCHAR#,
+      SEENAMES = #seenames:VARCHAR#,
+      ATTACHTYPE = #attachtype:VARCHAR#
+    where ATTACHID = #attachid:INTEGER#
+  </update>
+</sqlMap>

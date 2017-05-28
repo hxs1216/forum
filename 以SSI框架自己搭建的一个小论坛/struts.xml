@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!--启用ognl表达式-->
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<!-- spring注入失败的情况下使用struts自动装配策略进行注入 -->
+	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true" />
+	<constant name="struts.ui.theme" value="simple"></constant>
+	<constant name="struts.devMode" value="true"></constant>
+	<!-- 最大支	持50M文件上传 -->
+	<constant name="struts.multipart.maxSize" value="52428800"></constant>
+	<!--引入以globalFormatMessages为前缀的属性文件 -->
+	<constant name="struts.custom.i18n.resources" value="globalFormatMessages" />
+	<!-- 添加字符编码utf-8 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!--struts2可同时处理do、action两种请求后缀 -->
+	<constant name="struts.action.extension" value="do,action" />
+	<!--全局跳转 -->	
+	<package name="myDefault" extends="json-default" namespace="/">
+		<interceptors>
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack" /><!--必需引用这个，否则点下一个子ACTION会报错 -->
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+		<global-results>
+			<result name="error" type="redirect">/common/error.jsp</result>
+			<result name="close">/common/close.jsp</result>
+			<result name="loginPage" type="redirect">/login.jsp</result>
+			<result name="loginFail">/login.jsp</result>
+			<result name="hasfinish">/common/hasfinish.jsp</result>
+			<result name="nopermision">/common/nopermision.jsp</result>
+			<result name="go" type="redirect">/common/go.jsp?singerUser=${singerUser}&amp;proType=${proType}</result>
+		</global-results>
+	</package>
+	
+	<!--论坛-->
+	<package name="forum" extends="myDefault" namespace="/forum">
+		<action name="forumAction!*" method="{1}" class="com.nuchina.forum.action.ForumDetailAction">
+			<result name="home">/forum/home.jsp</result>
+			<result name="right">/forum/right.jsp</result>
+			<result name="left">/forum/left.jsp</result>
+			<result name="center">/forum/center.jsp</result>
+			<result name="homePost" type="redirect">/forum/home.jsp</result>
+			<result name="detail">/forum/forumPublish/detail.jsp</result>
+			<result name="personalDetail">/forum/forumPerson/personalDetail.jsp</result>
+			<result name="replyPerson">/forum/forumReply/replyPerson.jsp</result>
+			<result name="detailManage">/forum/forumPublish/detailManage.jsp</result>
+			<result name="moreJobForum">/forum/forumMore/moreJobForum.jsp</result>
+			<result name="moreLiveForum">/forum/forumMore/moreLiveForum.jsp</result>
+			<result name="moreBestForum">/forum/forumMore/moreBestForum.jsp</result>
+			<result name="doneList">/forum/forumPerson/doneList.jsp</result>
+			<result name="reply" type="redirect">
+				<param name="location">forum/forumAction!detail.action?record.id=${record.id}&amp;isTopic=0</param>
+				<param name="encode">true</param>
+			</result>
+			<result name="change" type="redirect">/forum/home.jsp</result>
+			<result name="myRelation">/forum/forumRelation/relation.jsp</result>
+			<result name="review">/forum/forumPublish/review.jsp</result>
+			<result name="picture">/forum/forumPublish/pictureUpdate.jsp</result>
+			<result name="publish">/forum/forumPublish/publish.jsp</result>
+			<result name="personPage">/forum/forumPerson/personalDetail1.jsp</result>
+			<result name="moreReply">/forum/forumPublish/reply.jsp</result>
+			<result name="mycomments">/forum/forumMore/mycomments.jsp</result>
+			<result name="format" type="redirect">
+				<param name="location">forum/forumAction!moreReply.action?page.pageSize=20&amp;record.id=${record.id}</param>
+				<param name="encode">true</param>
+			</result>
+			<result name="myNews">/forum/forumMore/mynews.jsp</result>
+			<result name="managerCheck">/forum/forumPerson/personalDetail2.jsp</result>
+			<result name="subModuleTop">/forum/subModuleTop.jsp</result>
+			
+		</action>
+	</package>
+	
+	
+	
+</struts>
